@@ -1,0 +1,695 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sovereign AI × Public Good</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FAF4ED; --sand:#EEE6DD; --sand2:#E4D9CE; --line:#D9CFC4;
+  --plum:#2D2A45; --ink:#575279; --ink2:#6B6688;
+  --rose:#B4637A; --rose-soft:#F4DCDD; --rose-line:#D9A3AE;
+  --teal:#286983; --teal-soft:#DCEBEC; --teal-line:#8DB6C2;
+  --peach:#F2C9BE;
+  --serif:"Newsreader","New York",Georgia,"Times New Roman",serif;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;-webkit-text-size-adjust:100%}
+h1,h2,h3,h4{font-family:var(--serif);color:var(--plum);margin:0;font-weight:600;line-height:1.2}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--rose);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px}
+
+/* header */
+header.top{padding:28px 0 18px;border-bottom:2px solid var(--rose)}
+.eyebrow{font-size:12px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;color:var(--rose)}
+h1{font-size:clamp(28px,4.6vw,46px);margin:6px 0 4px}
+.sub{font-family:var(--serif);font-size:clamp(17px,2.2vw,22px);color:var(--ink)}
+.quote{margin:18px 0 0;padding:14px 18px;background:var(--sand);border-left:6px solid var(--rose);border-radius:0 10px 10px 0;font-family:var(--serif);font-size:clamp(17px,2vw,21px);color:var(--plum)}
+.framing{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+.framing div{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:14px}
+.framing b{color:var(--plum)}
+.framing .c b{color:var(--teal)} .framing .i b{color:var(--rose)}
+
+/* tabs */
+nav.tabs{position:sticky;top:0;z-index:20;background:rgba(250,244,237,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+nav.tabs .wrap{display:flex;gap:4px;overflow-x:auto}
+.tab{background:none;border:0;border-bottom:3px solid transparent;padding:14px 14px 11px;font-weight:600;font-size:15px;color:var(--ink2);white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--plum);border-bottom-color:var(--rose)}
+.tab:hover{color:var(--plum)}
+main{padding:22px 0 60px}
+section.pane[hidden]{display:none}
+
+/* legend */
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px;color:var(--ink2);margin:0 0 14px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{display:inline-block;width:14px;height:14px;border-radius:4px}
+.sw.c{background:var(--teal)} .sw.i{background:var(--rose)}
+.badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:99px;vertical-align:middle;border:1px solid}
+.badge.est{color:var(--teal);background:var(--teal-soft);border-color:var(--teal-line)}
+.badge.hyp{color:var(--rose);background:var(--rose-soft);border-color:var(--rose-line)}
+.badge.ex{color:var(--ink);background:var(--sand);border-color:var(--sand2)}
+
+/* explore layout */
+.explore{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:26px;align-items:start}
+.left{position:sticky;top:62px}
+.viewtoggle{display:flex;background:var(--sand);border-radius:12px;padding:4px;gap:4px;margin-bottom:6px}
+.viewtoggle button{flex:1;border:0;background:transparent;padding:10px 8px;border-radius:9px;font-weight:700;font-size:14px;color:var(--ink2);line-height:1.2}
+.viewtoggle button small{display:block;font-weight:500;font-size:12px;opacity:.9}
+.viewtoggle button[aria-pressed="true"].sov{background:var(--teal);color:#fff}
+.viewtoggle button[aria-pressed="true"].pg{background:var(--rose);color:#fff}
+.hint{font-size:13px;color:var(--ink2);margin:0 0 10px}
+.cakewrap{position:relative;padding-right:46px}
+.slab{display:block;width:100%;text-align:left;background:#fff;border:2px solid var(--line);border-radius:12px;padding:12px 14px;position:relative;transition:border-color .15s, box-shadow .15s, background .15s}
+.slab:hover{border-color:var(--ink2)}
+.slab[aria-pressed="true"]{background:var(--plum);border-color:var(--plum);box-shadow:0 6px 18px rgba(45,42,69,.25)}
+.slab .row1{display:flex;align-items:baseline;gap:10px}
+.slab .num{font-size:12px;font-weight:700;color:var(--ink2);min-width:14px}
+.slab .nm{font-family:var(--serif);font-size:21px;font-weight:700;color:var(--plum)}
+.slab .one{font-size:13px;color:var(--ink2);margin:1px 0 8px 24px}
+.slab .chips{margin-left:24px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chip{font-size:12px;font-weight:600;padding:3px 9px;border-radius:8px;border:1px solid;line-height:1.3}
+.chip.c{background:var(--teal-soft);border-color:var(--teal-line);color:var(--teal)}
+.chip.i{background:var(--rose-soft);border-color:var(--rose-line);color:#8d3f56}
+.chip.dim{opacity:.35}
+.dots{display:inline-flex;gap:3px;align-items:center;margin-left:2px}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--rose)} .dot.off{background:transparent;border:1.5px solid var(--rose-line)}
+.slab[aria-pressed="true"] .nm{color:#fff} .slab[aria-pressed="true"] .one,.slab[aria-pressed="true"] .num{color:#dcd8ee}
+.slab[aria-pressed="true"] .chip.dim{opacity:.55}
+.gap{display:flex;justify-content:space-between;align-items:center;padding:3px 8px;font-size:12px;color:var(--ink2);min-height:26px}
+.gap .up{color:var(--teal);font-weight:600}
+.rail{position:absolute;right:0;top:6px;bottom:6px;width:38px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.rail .line{flex:1;width:0;border-left:3px dashed var(--teal-line)}
+.rail .lbl{writing-mode:vertical-rl;transform:rotate(180deg);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);margin:8px 0;text-align:center}
+.rail .arrow{color:var(--teal-line);font-size:14px;line-height:1}
+body.pgview .rail .line{border-left-color:var(--rose);} body.pgview .rail .lbl{color:var(--rose)} body.pgview .rail .arrow{color:var(--rose)}
+.defnote{margin-top:14px;font-size:13px;background:#fff;border:1px dashed var(--teal-line);border-radius:10px;padding:10px 12px}
+.defnote b{color:var(--teal)}
+
+/* detail */
+.detail{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 22px 26px;min-height:300px}
+.detail h2{font-size:clamp(26px,3.2vw,34px)}
+.detail .lead{font-size:17px;margin:6px 0 14px;color:var(--ink)}
+.bridge{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:8px;align-items:stretch;margin:12px 0 6px}
+.bridge .bx{border-radius:10px;padding:8px 10px;font-size:13px;line-height:1.35;border:1.5px solid}
+.bridge .bx b{display:block;font-size:11px;letter-spacing:.07em;text-transform:uppercase;margin-bottom:2px}
+.bridge .bx.i{background:var(--rose-soft);border-color:var(--rose-line);color:#6d2f43} .bridge .bx.i b{color:var(--rose)}
+.bridge .bx.c{background:var(--teal-soft);border-color:var(--teal-line);color:#15485c} .bridge .bx.c b{color:var(--teal)}
+.bridge .bx.p{background:var(--sand);border-color:var(--sand2);color:var(--plum)} .bridge .bx.p b{color:var(--ink2)}
+.bridge .ar{align-self:center;font-size:12px;font-weight:700;text-align:center;color:var(--ink2);line-height:1.1}
+.bridge .ar span{display:block;font-size:20px}
+.bridgenote{font-size:13px;color:var(--ink2);margin:0 0 8px}
+.sec{margin-top:20px;padding-top:16px;border-top:1px solid var(--line)}
+.sec h3{font-size:19px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px}
+.sec p{margin:0 0 8px}
+ul.tight{margin:0;padding-left:18px} ul.tight li{margin:3px 0}
+.cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.card{background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px}
+.card h4{font-family:var(--sans);font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--teal);margin-bottom:4px;font-weight:700}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lever{background:var(--cream);border:1px solid var(--rose-line);border-left:5px solid var(--rose);border-radius:10px;padding:10px 12px;margin:8px 0;font-size:14px}
+.lever h4{font-family:var(--sans);font-size:15px;color:var(--plum);margin-bottom:4px}
+.lever dl{margin:0;display:grid;grid-template-columns:92px 1fr;gap:3px 10px}
+.lever dt{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--rose);padding-top:2px}
+.lever dd{margin:0}
+.callout{border-radius:10px;padding:10px 12px;font-size:14px;margin:8px 0}
+.callout.ex{background:var(--sand);border-left:5px solid var(--ink2)}
+.callout.q{background:var(--plum);color:#fff;font-family:var(--serif);font-size:18px;line-height:1.4;padding:14px 16px}
+.callout.q small{display:block;font-family:var(--sans);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--peach);margin-bottom:4px;font-weight:700}
+.callout.warn{background:var(--rose-soft);border-left:5px solid var(--rose);color:#5d2538}
+.callout.info{background:var(--teal-soft);border-left:5px solid var(--teal);color:#15485c}
+table.mx{width:100%;border-collapse:collapse;font-size:13.5px;margin:6px 0}
+table.mx th,table.mx td{border-bottom:1px solid var(--line);padding:6px 6px;text-align:center}
+table.mx th:first-child,table.mx td:first-child{text-align:left;font-weight:600;color:var(--plum)}
+table.mx thead th{font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--teal);vertical-align:bottom}
+.mark{font-size:17px;color:var(--teal)} .mark.n{color:var(--line)}
+.mxwrap{overflow-x:auto}
+.mxlegend{font-size:12.5px;color:var(--ink2)}
+
+/* edtech */
+.steps{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:24px;align-items:start}
+.people{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 14px}
+.pill{background:#fff;border:1.5px solid var(--line);border-radius:99px;padding:6px 12px;font-size:13.5px;font-weight:600;color:var(--plum)}
+.pill[aria-pressed="true"]{background:var(--plum);color:#fff;border-color:var(--plum)}
+.pill.pi{border-color:var(--rose-line);background:var(--rose-soft)} .pill.pi[aria-pressed="true"]{background:var(--rose);border-color:var(--rose)}
+.pdetail{font-size:14px;background:var(--sand);border-radius:10px;padding:10px 12px;margin-bottom:14px;min-height:44px}
+.stk{display:grid;gap:8px;position:relative}
+.ly{display:grid;grid-template-columns:128px 1fr;gap:10px;background:#fff;border:2px solid var(--line);border-radius:12px;padding:10px 12px;align-items:center;transition:all .2s}
+.ly .nm{font-family:var(--serif);font-weight:700;color:var(--plum);font-size:18px}
+.ly .who{font-size:13.5px;color:var(--ink)}
+.ly.on{border-color:var(--rose);background:var(--rose-soft);box-shadow:0 4px 14px rgba(180,99,122,.22)}
+.ly.ben{background:var(--sand);border-style:dashed}
+.ly .stepdots{display:flex;gap:5px;margin-top:4px;flex-wrap:wrap}
+.sd{width:22px;height:22px;border-radius:50%;background:var(--plum);color:#fff;font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
+.sd.dim{background:var(--sand2);color:var(--ink2)}
+.sd.now{background:var(--rose);outline:3px solid var(--rose-soft)}
+.pi-band{margin-top:8px;border:2px dashed var(--rose);border-radius:12px;padding:10px 12px;font-size:14px;background:#fff;transition:all .2s}
+.pi-band.on{background:var(--rose-soft)}
+.pi-band b{color:var(--rose)}
+.stepcard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 20px;position:sticky;top:62px}
+.stepcard .n{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--rose);font-weight:700}
+.stepcard h3{font-size:24px;margin:4px 0 8px}
+.ctrl{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.btn{background:var(--plum);color:#fff;border:0;border-radius:10px;padding:9px 16px;font-weight:600;font-size:14px}
+.btn.alt{background:#fff;color:var(--plum);border:1.5px solid var(--plum)}
+.btn:disabled{opacity:.4;cursor:default}
+.progress{display:flex;gap:5px;margin:10px 0 0}
+.progress button{flex:1;height:8px;border:0;border-radius:4px;background:var(--sand2);padding:0}
+.progress button[aria-current="true"]{background:var(--rose)} .progress button.done{background:var(--plum)}
+
+/* discovery */
+.qgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.qcard{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+.qcard .qn{font-size:12px;font-weight:700;color:var(--rose);letter-spacing:.08em}
+.qcard h3{font-size:20px;margin:2px 0 8px}
+.qcard .look{font-size:13px;color:var(--ink2);margin-bottom:8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.qcard .look button{border:1px solid var(--teal-line);background:var(--teal-soft);color:var(--teal);border-radius:99px;padding:2px 10px;font-size:12px;font-weight:600}
+textarea,input[type=text]{width:100%;border:1.5px solid var(--line);border-radius:10px;background:var(--cream);padding:10px;font:inherit;font-size:14px;color:var(--plum)}
+textarea{min-height:76px;resize:vertical}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px;align-items:center}
+.note{font-size:13px;color:var(--ink2)}
+
+/* new guard */
+.ng{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:start}
+.hub{position:relative;background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px}
+.hubgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
+.hubcenter{grid-column:1/-1;text-align:center;background:var(--plum);color:#fff;border-radius:14px;padding:14px;font-family:var(--serif);font-size:20px}
+.hubcenter small{display:block;font-family:var(--sans);font-size:12px;color:var(--peach);letter-spacing:.06em;text-transform:uppercase;margin-top:2px}
+.spoke{background:var(--cream);border:1px solid var(--line);border-top:4px solid var(--rose);border-radius:10px;padding:10px;font-size:14px}
+.spoke b{display:block;color:var(--plum);font-family:var(--serif);font-size:17px}
+.isnot{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.isnot div{border-radius:10px;padding:10px 12px;font-size:14px}
+.isnot .y{background:var(--teal-soft);border:1px solid var(--teal-line)} .isnot .n{background:var(--rose-soft);border:1px solid var(--rose-line)}
+.isnot b{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px}
+.isnot .y b{color:var(--teal)} .isnot .n b{color:var(--rose)}
+.addrow{display:flex;gap:8px;margin:8px 0}
+.addrow input{flex:1}
+.plist{list-style:none;padding:0;margin:8px 0 0}
+.plist li{display:flex;justify-content:space-between;gap:8px;background:var(--cream);border:1px solid var(--line);border-radius:8px;padding:7px 10px;margin:5px 0;font-size:14px}
+.plist button{border:0;background:none;color:var(--rose);font-weight:700}
+
+footer{border-top:2px solid var(--rose);padding:22px 0 40px;margin-top:10px}
+footer .cq{font-family:var(--serif);font-size:clamp(19px,2.4vw,26px);color:var(--plum);max-width:900px}
+footer p.small{font-size:13px;color:var(--ink2);max-width:900px}
+
+@media (max-width:980px){
+  .explore,.steps,.ng{grid-template-columns:1fr}
+  .left,.stepcard{position:static}
+  .framing{grid-template-columns:1fr}
+  .qgrid{grid-template-columns:1fr}
+}
+@media (max-width:620px){
+  .wrap{padding:0 14px}
+  .cols3,.cols2,.isnot,.hubgrid{grid-template-columns:1fr}
+  .bridge{grid-template-columns:1fr}
+  .bridge .ar span{transform:rotate(90deg)}
+  .lever dl{grid-template-columns:1fr}
+  .ly{grid-template-columns:1fr}
+  .detail{padding:16px 14px 20px}
+}
+@media print{nav.tabs,.toolbar,.ctrl{display:none} .left{position:static} body{background:#fff}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="wrap">
+  <div class="eyebrow">Exploratory framework · A conversation tool, not a proposal</div>
+  <h1>Sovereign AI × Public Good</h1>
+  <div class="sub">Mapping control, influence and opportunity across the AI stack</div>
+  <div class="quote">“What if we could make the public good an active input into AI innovation, rather than an outcome we attempt to protect after the fact?”</div>
+  <div class="framing">
+    <div class="c"><b>Control</b> is who can change a system directly, and what they can change.</div>
+    <div class="i"><b>Influence</b> is who shapes the decisions of the people who hold control.</div>
+    <div><b>Foundation:</b> Jensen Huang’s five-layer AI cake: energy, chips, infrastructure, models, applications. The overlay of control and influence is our working lens, not an industry standard.</div>
+  </div>
+</div></header>
+
+<nav class="tabs" aria-label="Sections"><div class="wrap" role="tablist">
+  <button class="tab" role="tab" id="t-explore" aria-controls="p-explore" aria-selected="true">1 · Explore the stack</button>
+  <button class="tab" role="tab" id="t-edtech" aria-controls="p-edtech" aria-selected="false">2 · EdTech worked example</button>
+  <button class="tab" role="tab" id="t-disc" aria-controls="p-disc" aria-selected="false">3 · Discovery questions</button>
+  <button class="tab" role="tab" id="t-ng" aria-controls="p-ng" aria-selected="false">4 · The New Guard</button>
+</div></nav>
+
+<main><div class="wrap">
+
+<!-- ================= EXPLORE ================= -->
+<section class="pane" id="p-explore" role="tabpanel" aria-labelledby="t-explore">
+  <div class="legend" aria-label="Legend">
+    <span><i class="sw c"></i> Control: who can change it</span>
+    <span><i class="sw i"></i> Influence: who shapes the decision</span>
+    <span><span class="badge est">General pattern</span> established technical concept</span>
+    <span><span class="badge hyp">Hypothesis</span> strategic idea to test</span>
+    <span><span class="badge ex">Example</span> illustrative only</span>
+  </div>
+  <div class="explore">
+    <div class="left">
+      <div class="viewtoggle" role="group" aria-label="View">
+        <button class="sov" id="v-sov" aria-pressed="true">View 1 · Sovereignty<small>Control and dependencies</small></button>
+        <button class="pg" id="v-pg" aria-pressed="false">View 2 · Public good<small>Influence and levers</small></button>
+      </div>
+      <p class="hint" id="hint">Select a layer. Every layer shows control first; switch views to see influence.</p>
+      <div class="cakewrap" id="cake"></div>
+      <div class="defnote"><b>Sovereignty</b> is not necessarily about owning every layer. It is the degree of meaningful control, operational independence and freedom from unwanted dependencies across the stack. Sovereignty does not by itself produce public benefit.</div>
+    </div>
+    <div class="detail" id="detail" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- ================= EDTECH ================= -->
+<section class="pane" id="p-edtech" role="tabpanel" aria-labelledby="t-edtech" hidden>
+  <h2 style="font-size:clamp(24px,3vw,32px)">EdTech: the first proving ground</h2>
+  <p style="max-width:860px">Education is the first test, not the whole mission. The customer and the beneficiary are often different people, which makes it a useful place to ask whether public-interest needs can travel through the stack. Example product: an <b>AI tutor</b>. <span class="badge hyp">Proposed mechanism to investigate</span> This is not an established causal chain.</p>
+  <div class="steps">
+    <div>
+      <div class="note" style="margin-bottom:4px">Select a stakeholder to see what they tend to prioritize. Priorities overlap but are not identical, and they may not be equally represented in buying and development decisions.</div>
+      <div class="people" id="people"></div>
+      <div class="pdetail" id="pdetail">Select a stakeholder above.</div>
+      <div class="stk" id="stk"></div>
+    </div>
+    <div class="stepcard" id="stepcard"></div>
+  </div>
+</section>
+
+<!-- ================= DISCOVERY ================= -->
+<section class="pane" id="p-disc" role="tabpanel" aria-labelledby="t-disc" hidden>
+  <h2 style="font-size:clamp(24px,3vw,32px)">Strategic discovery</h2>
+  <p style="max-width:860px">Eight things to find out together. Use the notes as a shared scratchpad during the conversation. Notes stay in this browser only.</p>
+  <div class="toolbar">
+    <button class="btn" id="copyNotes">Copy all notes</button>
+    <button class="btn alt" id="dlNotes">Download notes (.txt)</button>
+    <button class="btn alt" id="clearNotes">Clear notes</button>
+    <span class="note" id="noteStatus" role="status"></span>
+  </div>
+  <div class="qgrid" id="qgrid"></div>
+</section>
+
+<!-- ================= NEW GUARD ================= -->
+<section class="pane" id="p-ng" role="tabpanel" aria-labelledby="t-ng" hidden>
+  <h2 style="font-size:clamp(24px,3vw,32px)">The New Guard <span class="badge hyp">Working concept</span></h2>
+  <div class="ng">
+    <div>
+      <p style="font-size:17px">Emerging leaders and organizations that seek to advance technological innovation and public benefit together. No one is named, and no movement is claimed. The philosophy should evolve through this conversation.</p>
+      <div class="isnot">
+        <div class="y"><b>It is</b>A way to find people already connecting technology to public-interest outcomes. Complementary to research, advocacy, law, regulation and philanthropy. People can work in both approaches.</div>
+        <div class="n"><b>It is not</b>A faction, a list of opponents, a replacement for traditional institutions, or a claim that a movement already exists.</div>
+      </div>
+      <div class="callout info" style="margin-top:14px"><b>Established approach:</b> research, advocacy, legislation, policy, regulation, institutional accountability.<br><b>Emerging approach (hypothesis):</b> engaging developers directly, technical evaluations, adoption decisions, customer incentives and real-world feedback loops.</div>
+      <h3 style="margin-top:20px;font-size:20px">Who might we look for?</h3>
+      <ul class="tight">
+        <li>AI developers and researchers</li><li>Hardware and infrastructure leaders</li><li>EdTech founders and product leaders</li>
+        <li>Educators and educational institutions</li><li>Philanthropic leaders and public-interest researchers</li>
+        <li>Organizations making AI adoption decisions</li><li>Representatives of affected communities</li>
+      </ul>
+    </div>
+    <div class="hub">
+      <h3 style="font-size:19px">Where they connect</h3>
+      <div class="hubgrid">
+        <div class="hubcenter">The New Guard<small>Working concept</small></div>
+        <div class="spoke"><b>Technology development</b>Building products and models</div>
+        <div class="spoke"><b>Customer adoption</b>What gets bought and deployed</div>
+        <div class="spoke"><b>Technical evaluation</b>How quality and safety are measured</div>
+        <div class="spoke"><b>Economic incentives</b>What makes a signal matter to companies</div>
+        <div class="spoke" style="grid-column:1/-1"><b>Public-interest outcomes</b>Learning, equity, access, safety and trust, measured in the real world</div>
+      </div>
+      <h3 style="margin-top:18px;font-size:19px">People and organizations to explore</h3>
+      <p class="note" style="margin:2px 0">Start blank. Add names only as we discover them together.</p>
+      <div class="addrow"><input type="text" id="pname" placeholder="Name or organization, and why they come to mind" aria-label="Add a person or organization"><button class="btn" id="padd">Add</button></div>
+      <ul class="plist" id="plist"></ul>
+    </div>
+  </div>
+</section>
+
+</div></main>
+
+<footer><div class="wrap">
+  <div class="cq">“What if we could make the public good an active input into AI innovation, rather than an outcome we attempt to protect after the fact?”</div>
+  <p class="small">An exploratory tool. Technical descriptions reflect general patterns and vary by provider, license and context. Strategic items are hypotheses to test, not findings. No statistics are used. The five-layer stack is Jensen Huang’s framework; the control-and-influence overlay is a working lens for discussion.</p>
+</div></footer>
+
+<script>
+/* ===================== DATA ===================== */
+const LAYERS = [
+{
+ id:"apps", num:5, name:"Applications", short:"Products that put models to work for people",
+ chipC:"App developers · deployers", chipI:"Buyers · users · procurement", channel:"Customer demand", direct:3,
+ does:"Turns model capability into something people use: tutors, copilots, agents and workflow tools. This is where most users, and most buyers, meet AI.",
+ controllers:["Application developers and product companies","Enterprises and institutions that build or configure their own tools","Deployers, such as a school district configuring a purchased product"],
+ control:{
+  Technical:["Prompt and system-prompt configuration","Which sources the app retrieves from (grounding data)","Guardrails, content filters, tool and data permissions","Which model or models it calls, and routing between them","Logging, data retention, interface and features"],
+  Operational:["Where it runs: cloud, private or on-premises","Access control and identity","Monitoring, incident response and update cadence","Human oversight and escalation paths"],
+  Economic:["Pricing, licensing and contract terms","What gets bought, renewed or cancelled","Which features the roadmap funds"]},
+ deps:["Model providers and their API terms","Cloud hosting and identity platforms","Data sources and content licenses"],
+ replace:"Often the most replaceable layer if the product is built to work with more than one model. How far it can be audited depends on what the vendor reveals about prompts, data handling and evaluation results.",
+ sov:"Independence here means being able to swap a model or host without rebuilding the product, and being able to see what the system is doing.",
+ customers:["Enterprises, public agencies and institutions","Consumers, families and individual professionals"],
+ purchasing:["Procurement and IT leaders","Legal, privacy and security reviewers","Pilot users and peer references","Analysts and industry reviews"],
+ feedback:["Sales cycles, renewals and churn","Usage analytics and support tickets","Pilots and user research","Procurement requirements and security questionnaires"],
+ incentives:["Revenue and retention","Features and speed to market","Compliance requirements that block or unblock a sale"],
+ roadmap:["What buyers ask for in demos and requests for proposals","Competitor releases","Usage data on what people actually do"],
+ enters:["Law-driven requirements such as privacy and accessibility","Advisory boards and pilot partners","Research partnerships"],
+ missing:["People who use a product but do not buy it, such as students and families, may reach the roadmap mostly through the buyer.","Outcome measures, such as learning gains for different groups, may appear in buying criteria less often than price, features and compliance."],
+ orgs:["Research-practice partnerships and independent evaluators","Buyer collaboratives and district networks","Standards and certification bodies","Funders of pilots that measure outcomes"],
+ levers:[
+  {n:"Procurement requirements",d:"Which AI tutoring product a district buys",w:"District procurement committee and technology director",h:"Shared request-for-proposal language and scoring rubrics that ask vendors for evidence on specific outcomes, accessibility and data practices."},
+  {n:"Technical benchmarks and quality evaluations",d:"Which products make a district’s shortlist",w:"Curriculum leaders and pilot teachers",h:"Independent evaluation results, published in a form buyers can compare."},
+  {n:"Product specifications",d:"What the next version of a tutor does",w:"EdTech product leaders",h:"Requirements co-designed with teachers and learners, tied to renewal conditions."},
+  {n:"Customer education",d:"How buyers judge a vendor’s claims",w:"School and district leaders",h:"Plain-language guides on what evidence to ask for."},
+  {n:"Philanthropic investment",d:"Which pilots get run and measured",w:"Funders and districts",h:"Funding studies that report outcomes, not only usage."}],
+ note:"Customer demand acts most directly at this layer, through buying decisions.",
+ edtech:"An AI tutoring product is up for purchase. The district committee scores price, compliance and ease of use. A public-interest evaluation defines “effective and accessible tutoring” in measurable terms, such as support for multilingual learners and students with disabilities. The district adds it to its request for proposals, and vendors respond with evidence.",
+ edtechS:"A district buys a tutor built on one model provider. Can it switch providers, take its data with it, and review how the tool behaves if the vendor changes course?",
+ qPG:"Which education purchasing decisions are consequential enough to shape what vendors build, and who sits at those tables today?",
+ qSov:"How much real choice do buyers have if a product is tied to one model provider?"
+},
+{
+ id:"models", num:4, name:"Models", short:"General capabilities that applications build on",
+ chipC:"Model developers · deployers", chipI:"API customers · evaluators · researchers", channel:"Customers and evaluations", direct:2,
+ does:"Learns patterns from data and produces text, images, code and other outputs. Applications build on these general capabilities.",
+ controllers:["Frontier and foundation model developers","Open-weight model publishers and the community around them","Application developers, within the limits of API terms or license","Third-party evaluators and red teams, who test but do not control"],
+ control:{
+  Technical:["Prompt configuration and system prompts","Inference parameters, such as temperature and output length","Model selection and versioning","Evaluation criteria and release thresholds","Fine-tuning","Modifying model weights","Training objectives","Training data","Model architecture"],
+  Operational:["Deployment and hosting: provider API, cloud or self-hosted","Safety testing, monitoring and incident response","Version retirement and deprecation schedules"],
+  Economic:["Pricing per use, licensing and usage terms","Compute spending on training versus serving","Which models and sizes are offered"]},
+ deps:["Compute from infrastructure and chips","Training data sources and licenses","Cloud partners and distribution channels","Evaluation tools and benchmarks that others built"],
+ replace:"Who can modify, operate, audit or replace depends on access. With a closed API, a customer can choose and configure a model but cannot change its weights. With open weights, a deployer can fine-tune, host and audit more fully, but needs compute and expertise. Terms vary by provider and license.",
+ sov:"Independence here means access you can rely on: the ability to host, evaluate and, where needed, adapt a model without depending on one provider’s terms.",
+ customers:["API customers: application developers and enterprises","Cloud platform customers","Consumers of chat products","Governments and research institutions"],
+ purchasing:["AI and engineering leaders choosing a model for a use case","Procurement and security reviewers","Results from internal tests and public benchmarks"],
+ feedback:["API usage and customer requests, within privacy terms","Public benchmarks and leaderboards","Red-team and safety evaluation findings","User preference signals and ratings","Developer communities and open-source contributions"],
+ incentives:["Adoption and revenue from large customers","Standing on capability benchmarks","Trust, safety and regulatory obligations"],
+ roadmap:["Customer feature requests","Benchmark results and competitor releases","Internal research priorities","Safety and policy review"],
+ enters:["Safety and policy teams and external red teams","Regulatory obligations","Research collaborations and evaluations"],
+ missing:["General benchmarks tend to measure broad capability. Domain outcomes, such as teaching quality, accessibility across languages and fairness across student groups, may be thinly represented.","Customers with small budgets may have few direct channels to model teams."],
+ orgs:["Independent evaluators and research labs","Education research organizations building domain evaluations","Coalitions of buyers that pool requirements","Standards bodies"],
+ levers:[
+  {n:"Technical benchmarks",d:"Which model an EdTech company selects for a tutor",w:"EdTech engineering and product leaders",h:"A public, domain-specific evaluation, for example whether a tutor guides rather than gives answers and works across languages, used during model selection."},
+  {n:"Safety and quality evaluations",d:"Whether a release meets a threshold for use with minors",w:"Model developers’ safety and policy teams",h:"Shared test suites and independent findings that developers can run and respond to."},
+  {n:"Developer engagement",d:"What the model team prioritizes in post-training",w:"Model developer product and research leads",h:"Structured feedback channels from educators and researchers, backed by concrete examples of failures."},
+  {n:"Public-interest coalitions",d:"Which requirements a large buyer group asks for",w:"Enterprise and public-sector customers",h:"Pooled requirements delivered as one clear request."},
+  {n:"Research and evidence generation",d:"Whether a model is trusted for a given use",w:"Researchers, buyers and regulators",h:"Published studies that link model behavior to outcomes."}],
+ note:"Influence is mostly mediated: through customers, evaluations and the developers who respond to them.",
+ edtech:"An EdTech company is choosing a model for an AI tutor. If an education-specific benchmark exists, with measures for teaching approach, multilingual support and accessibility, the company can compare models on what matters to schools, and model teams can see how they score.",
+ edtechS:"An EdTech company builds on a closed model API. If the provider changes pricing, behavior or availability, how quickly can it move to another model or an open-weight option?",
+ qPG:"Which model decisions respond to customer-side evaluation, and which are mostly insulated from it?",
+ qSov:"For education, is access to open-weight models a meaningful form of independence, or does it shift the burden onto schools that lack expertise?",
+ matrix:{
+  cols:["Model developer","App developer using a closed API","Deployer of an open-weight model","Customer or end user"],
+  rows:[["Prompt configuration",[2,2,2,1]],["Inference parameters",[2,1,2,1]],["Model selection",[1,2,2,1]],["Evaluation criteria",[2,1,2,1]],["Fine-tuning",[2,1,2,0]],["Modifying model weights",[2,0,2,0]],["Training objectives",[2,0,1,0]],["Training data",[2,0,1,0]],["Model architecture",[2,0,1,0]],["Deployment and hosting",[2,1,2,0]]]}
+},
+{
+ id:"infra", num:3, name:"Infrastructure", short:"Data centers, networks and cloud that train and run models",
+ chipC:"Cloud · data center operators", chipI:"Anchor customers · governments", channel:"Contract terms", direct:2,
+ does:"The data centers, networking, storage, orchestration software and cloud platforms that train models and serve them to applications.",
+ controllers:["Cloud and data center operators","AI infrastructure providers","Enterprises and governments running their own or national compute","Network and platform software providers"],
+ control:{
+  Technical:["Cluster design, networking and storage","Orchestration and scheduling software","Inference serving stack and model hosting options","Observability and logging"],
+  Operational:["Where data is stored and processed (data residency)","Shared or dedicated capacity (tenancy)","Security, access control and attestation","Uptime commitments and capacity allocation"],
+  Economic:["Pricing and reserved-capacity contracts","Capital investment and siting","Energy contracts and costs","Who gets priority when capacity is tight"]},
+ deps:["Chip supply and the software ecosystems around chips","Energy, cooling and water","Network connectivity","Cloud-vendor tools that raise switching costs"],
+ replace:"Workloads can often move between providers, but data transfer costs, software dependencies and contract terms can make that hard. Auditability depends on certifications, logs and what operators agree to disclose.",
+ sov:"Independence here means choosing where data and workloads live, being able to move them, and not depending on a single provider’s terms.",
+ customers:["Model developers as very large buyers","Enterprises and application developers","Public-sector bodies and research institutions"],
+ purchasing:["Technology and security leaders","Procurement teams and legal reviewers","Government procurement rules and certifications"],
+ feedback:["Capacity commitments and contracts","Service-level agreements and incident reviews","Security and compliance audits","Public-sector requirements such as data residency and privacy terms"],
+ incentives:["Utilization and long-term contracts","Capital and energy efficiency","Meeting regulated customers’ compliance needs"],
+ roadmap:["Anchor customers’ workloads and forecasts","Chip and software availability","Regulation and customer compliance needs"],
+ enters:["Privacy and security law","Public-sector procurement terms","Certification programs"],
+ missing:["End beneficiaries, such as students and families, have little direct voice. Their needs usually arrive as contract terms passed down from buyers.","Access and cost for under-resourced institutions may not be a design priority."],
+ orgs:["State or regional purchasing consortia","Standards and certification bodies","Public-interest legal and privacy organizations","Funders of shared public-interest compute"],
+ levers:[
+  {n:"Procurement requirements",d:"Which cloud or hosting terms apply to student data",w:"State education agencies and large district consortia",h:"Standard data-protection and residency terms in master contracts that vendors must meet to sell to schools."},
+  {n:"Industry standards",d:"What counts as acceptable privacy and security practice",w:"Cloud providers and certification bodies",h:"Education-specific certification criteria that buyers can reference."},
+  {n:"Public-interest coalitions",d:"How much pooled demand goes to providers who meet those terms",w:"Consortium purchasing leads",h:"Combined purchasing that gives providers a reason to build to the requirement."},
+  {n:"Philanthropic investment",d:"Whether shared infrastructure for public-interest use gets built",w:"Funders, with providers or public institutions",h:"Seed funding for shared evaluation or hosting capacity, with clear conditions."}],
+ note:"Influence here mostly travels as contract terms set by buyers in the layers above.",
+ edtech:"A state consortium sets data-residency, privacy and audit terms for any AI product that hosts student data. EdTech vendors then choose infrastructure that meets them, and providers see steady demand for compliant offerings.",
+ edtechS:"Where is a district’s student data processed, who can access it, and can the district take it elsewhere?",
+ qPG:"At this layer, can philanthropy realistically influence decisions directly, or mainly through contract terms set by buyers above?",
+ qSov:"What would “meaningful control” of infrastructure mean for a school system, as opposed to a nation?"
+},
+{
+ id:"chips", num:2, name:"Chips", short:"Processors, memory and interconnect that do the math",
+ chipC:"Chip designers · manufacturers", chipI:"Largest buyers · governments", channel:"Aggregated demand", direct:1,
+ does:"GPUs and other accelerators, plus memory and high-speed interconnect, that perform the computation for training and running models.",
+ controllers:["Chip designers","Manufacturers and suppliers of memory and advanced packaging","System builders","Governments, through export controls and industrial policy"],
+ control:{
+  Technical:["Architecture and numerical precision","Memory capacity, bandwidth and interconnect","Software stack, drivers and compiler support","Security features such as confidential computing"],
+  Operational:["Manufacturing and packaging capacity","Allocation of supply among customers","Firmware updates and supply-chain security"],
+  Economic:["Pricing and volume commitments","Product roadmaps and investment","Which markets and configurations get priority"]},
+ deps:["Advanced manufacturing capacity concentrated in a small number of suppliers","Memory and packaging supply","Software ecosystems that make switching costly","Energy-efficiency limits"],
+ replace:"Replacing a chip platform usually means porting software and retraining teams. Operators can often measure performance, but design details are typically not public.",
+ sov:"Independence is limited for most actors. It often means a diversity of suppliers, portable software and supply that does not hinge on a single point of failure.",
+ customers:["Cloud providers and large AI developers","System builders and enterprises","Governments and research computing centers"],
+ purchasing:["Infrastructure engineering and procurement leads at the largest buyers","Workload benchmarks"],
+ feedback:["Co-design with the largest customers","Workload benchmarks, such as MLPerf","Supply and demand signals","Developer tool usage"],
+ incentives:["Volume from the largest buyers","Performance and energy efficiency","Growth of the software ecosystem"],
+ roadmap:["Workload trends from large customers","Manufacturing and memory constraints","Government policy"],
+ enters:["Export-control and industrial policy","Research computing access programs"],
+ missing:["Public-interest needs rarely reach chip roadmaps directly. They may arrive only as downstream demand for lower cost or lower power."],
+ orgs:["Research computing and academic access programs","Benchmark consortia","Coalitions that aggregate demand for efficient, low-cost compute"],
+ levers:[
+  {n:"Technical benchmarks",d:"How efficiency and cost per task are reported and compared",w:"Benchmark consortia and large buyers",h:"Benchmarks that include cost and energy per useful task for education-style workloads."},
+  {n:"Public-interest coalitions",d:"What large buyers ask hardware vendors for",w:"Cloud and enterprise purchasing leads",h:"Aggregated requests for affordable, efficient inference."},
+  {n:"Developer engagement",d:"Which small-model and on-device scenarios hardware teams support",w:"Hardware product and software leads",h:"Concrete, documented use cases from low-bandwidth and low-budget settings."}],
+ note:"Realistic influence here is limited and mostly indirect. The more likely route is downstream demand and shared benchmarks.",
+ edtech:"Many schools have tight budgets and uneven connectivity. Demand for affordable tutoring that runs efficiently could, in principle, shape model size and serving choices, which then reach hardware plans. This is the weakest and slowest link to test.",
+ edtechS:"If a district’s tutoring depends on scarce, high-end hardware, how exposed is it to supply and price changes upstream?",
+ qPG:"Is chip-level influence worth pursuing directly, or better treated as an effect of choices in the layers above?",
+ qSov:"Where does a diversity of chip suppliers matter most for public-interest uses?"
+},
+{
+ id:"energy", num:1, name:"Energy", short:"Power, grid, cooling and water that make computing possible",
+ chipC:"Utilities · regulators · developers", chipI:"Regulators · communities · power buyers", channel:"Civic and regulatory process", direct:2,
+ does:"Electricity generation, grid connection and cooling that power data centers. Energy is the base layer the other four depend on.",
+ controllers:["Utilities and grid operators","Power producers","Data center developers, through siting and power contracts","Regulators and permitting authorities"],
+ control:{
+  Technical:["Generation mix and storage","Grid capacity and interconnection","On-site generation and cooling design"],
+  Operational:["Site selection and permitting","Load scheduling and flexibility","Water use and cooling method","Reliability and backup power"],
+  Economic:["Power purchase agreements and tariffs","Incentives and rate design","Capital for generation and grid upgrades"]},
+ deps:["Grid capacity and permitting timelines","Fuel supply and water availability","Local approval and community consent","Equipment lead times"],
+ replace:"Operators can choose sites and energy sources, but grid connections and permits take time and are shaped by public processes. Regulators and communities can scrutinize decisions through public filings and hearings.",
+ sov:"Independence here often means reliable, affordable power where the compute runs, and some control over how it is sourced.",
+ customers:["Data center operators and cloud providers as large power buyers","Other industrial and residential customers sharing the grid"],
+ purchasing:["Data center developers and energy teams","Utilities and regulators who approve contracts and tariffs"],
+ feedback:["Public utility commission proceedings","Permitting and zoning hearings","Power purchase agreements and corporate commitments","Community benefit agreements"],
+ incentives:["Reliable, low-cost power","Speed to connect","Corporate energy and sustainability commitments"],
+ roadmap:["Forecast demand from large buyers","Regulation and permitting timelines","Cost and availability of generation"],
+ enters:["Public hearings and regulatory proceedings","Community benefit agreements","Environmental and consumer advocates"],
+ missing:["People who bear energy costs or water impacts and the downstream users of AI may not be connected to each other in siting decisions.","Reporting on energy and water use per AI workload may be limited."],
+ orgs:["Consumer and environmental advocates","Community organizations and local governments","Independent energy researchers","Standards groups working on energy and water reporting"],
+ levers:[
+  {n:"Public-interest coalitions",d:"The terms of a data center’s local approval",w:"Local regulators and the developer",h:"Community benefit agreements negotiated by organized residents."},
+  {n:"Research and evidence generation",d:"How regulators set tariffs and conditions",w:"Public utility commissions",h:"Independent analysis of energy, cost and water effects."},
+  {n:"Procurement requirements",d:"Which cloud provider a public buyer picks",w:"State or district procurement leads",h:"Contract language asking for energy and water reporting for hosted AI workloads."},
+  {n:"Industry standards",d:"How energy use per workload is reported",w:"Providers and standards bodies",h:"Common reporting formats that buyers can compare."}],
+ note:"Existing civic and regulatory processes already give the public a voice here, through different channels than customer demand.",
+ edtech:"A state education buyer includes energy and water reporting for AI workloads in its cloud contract. The effect is small alone. It matters more if many public buyers ask together.",
+ edtechS:"Does a district’s AI service depend on a region where power is constrained or costly?",
+ qPG:"Existing civic processes already give the public a voice here. Is energy a model for what a stronger signal could look like in other layers?",
+ qSov:"What does reliable, local power mean for an education system’s AI services?"
+}
+];
+const FLOWS = {up:["Energy powers the compute","Chips enable AI infrastructure","Infrastructure enables model development and deployment","Models enable applications"]};
+
+const STAKE = [
+ {id:"stu",n:"Students",d:"Personalized learning, accessibility and appropriate support. Experience the product directly but rarely buy it.",row:"ben"},
+ {id:"tea",n:"Teachers",d:"Instructional effectiveness and classroom usability. Experience the product directly and often influence pilots.",row:"ben"},
+ {id:"par",n:"Parents and families",d:"Privacy, safety and learning outcomes. Strong interest in outcomes, limited role in purchasing.",row:"ben"},
+ {id:"dis",n:"Schools and districts",d:"Affordability, compliance and operational efficiency. They hold the purchasing decision.",row:"apps"},
+ {id:"edt",n:"EdTech companies",d:"Build the applications and respond to customer demand.",row:"apps"},
+ {id:"fmd",n:"Foundation model developers",d:"Supply the underlying capability. Respond to large customers, evaluations and safety review.",row:"models"},
+ {id:"cld",n:"Cloud and infrastructure providers",d:"Provide hosting and compute. Shaped by contract terms and anchor customers.",row:"infra"},
+ {id:"hw",n:"Hardware companies",d:"Provide chips and systems. Shaped by the largest buyers and manufacturing constraints.",row:"chips"},
+ {id:"pi",n:"Philanthropic and public-interest organizations",d:"Translate needs into measurable requirements, fund evidence and pilots, and convene buyers. They can influence decisions without controlling them.",row:"pi",pi:true}
+];
+const STEPS = [
+ {t:"A need is identified",b:"Students and teachers identify a need for effective, accessible AI tutoring.",rows:["ben"],c:"Starting point. The need is real and observable.",tag:"ex"},
+ {t:"The need becomes measurable",b:"Researchers and public-interest organizations translate that need into measurable requirements and evaluations.",rows:["pi"],c:"The missing translation step in our hypothesis. This is where public-interest organizations add something others may not.",tag:"hyp"},
+ {t:"Buyers adopt the criteria",b:"School districts incorporate those requirements into purchasing criteria.",rows:["apps"],c:"Districts decide. This is influence on the buyer, not control of the product.",tag:"hyp"},
+ {t:"Companies respond to demand",b:"EdTech companies respond to customer demand and build to the criteria.",rows:["apps"],c:"Established market behavior: vendors respond to what buyers require.",tag:"est"},
+ {t:"Application needs reach models",b:"Application requirements influence model selection and development.",rows:["models"],c:"Plausible when apps can choose among models and have evaluations to compare them. The signal may weaken here.",tag:"hyp"},
+ {t:"Model needs reach infrastructure",b:"Model requirements influence infrastructure decisions.",rows:["infra"],c:"Plausible mostly through hosting, privacy and cost requirements. The signal may weaken further.",tag:"hyp"},
+ {t:"Infrastructure may reach hardware",b:"Infrastructure requirements may influence hardware procurement.",rows:["chips"],c:"The weakest and slowest link. Test last, and treat it as an effect rather than a target.",tag:"hyp"},
+ {t:"Outcomes feed back",b:"Real-world educational outcomes feed back into evaluations and future purchasing decisions.",rows:["ben","pi","apps"],c:"The loop closes. Without measured outcomes, the mechanism cannot learn or be tested.",tag:"hyp"}
+];
+const QS = [
+ {q:"Who actually makes consequential AI decisions?",l:["apps","models","infra"]},
+ {q:"What information influences those decisions?",l:["models","apps"]},
+ {q:"Which customers have the strongest influence?",l:["models","infra"]},
+ {q:"Where do developers receive feedback?",l:["apps","models"]},
+ {q:"Are public-interest needs adequately represented?",l:["apps","models","infra","chips","energy"]},
+ {q:"Which decisions could philanthropy realistically influence?",l:["apps","infra","energy"]},
+ {q:"What intervention could create measurable change?",l:["apps","models"]},
+ {q:"Who is already working at this intersection?",l:[]}
+];
+const NAMES = Object.fromEntries(LAYERS.map(l=>[l.id,l.name]));
+
+/* ===================== HELPERS ===================== */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const ul = a => `<ul class="tight">${a.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`;
+const badge = t => t==="est"?'<span class="badge est">General pattern</span>':t==="hyp"?'<span class="badge hyp">Hypothesis</span>':'<span class="badge ex">Example</span>';
+const sec = (title,tag,body) => `<div class="sec"><h3>${esc(title)} ${tag?badge(tag):""}</h3>${body}</div>`;
+const store = {
+  get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+};
+const state = {layer:"apps", view:"sov", step:0, stake:null};
+const hash = () => { try{ history.replaceState(null,"",`#${state.view}/${state.layer}`) }catch(e){} };
+
+/* ===================== EXPLORE ===================== */
+function renderCake(){
+  const c = $("#cake"); let h="";
+  LAYERS.forEach((l,i)=>{
+    const sov = state.view==="sov";
+    const dots = `<span class="dots" role="img" aria-label="Working read of how directly customer demand can reach this layer: ${l.direct} of 3">${[1,2,3].map(n=>`<i class="dot ${n<=l.direct?"":"off"}"></i>`).join("")}</span>`;
+    h += `<button class="slab" data-layer="${l.id}" aria-pressed="${state.layer===l.id}">
+      <div class="row1"><span class="num">${l.num}</span><span class="nm">${l.name}</span></div>
+      <div class="one">${esc(l.short)}</div>
+      <div class="chips">
+        <span class="chip c ${sov?"":"dim"}">Control · ${esc(l.chipC)}</span>
+        <span class="chip i ${sov?"dim":""}">Influence · ${esc(l.chipI)}</span>
+        ${sov?"":`<span class="chip i" style="background:#fff">${l.levers.length} levers ${dots}</span>`}
+      </div></button>`;
+    if(i<LAYERS.length-1){
+      const up = FLOWS.up[3-i];
+      h += `<div class="gap"><span class="up">▲ ${esc(up)}</span>${i===0?'<span>demand flows down</span>':''}</div>`;
+    }
+  });
+  h += `<div class="rail" aria-hidden="true"><span class="arrow">▼</span><div class="line"></div><div class="lbl">${state.view==="sov"?"Customer demand shapes every layer below":"Proposed: stronger public-interest signal"}</div><div class="line"></div><span class="arrow">▼</span></div>`;
+  c.innerHTML = h;
+  c.querySelectorAll(".slab").forEach(b=>b.addEventListener("click",()=>{state.layer=b.dataset.layer;update(true)}));
+}
+function bridge(l){
+  return `<div class="bridge" aria-label="Influence leads to control, which acts on parameters">
+    <div class="bx i"><b>Influence</b>${esc(l.chipI)}</div><div class="ar"><span>→</span>shape</div>
+    <div class="bx c"><b>Control</b>${esc(l.chipC)}</div><div class="ar"><span>→</span>change</div>
+    <div class="bx p"><b>What changes</b>${state.view==="sov"?"Technical, operational and economic levers":"Products, models, contracts and roadmaps"}</div></div>
+  <p class="bridgenote">Influence is shaping the people who hold control. It is not control itself.</p>`;
+}
+function matrix(m){
+  const sym=["○","◐","●"], lab=["no control","partial or limited control","full control, within license and terms"];
+  const head = m.cols.map(c=>`<th scope="col">${esc(c)}</th>`).join("");
+  const rows = m.rows.map(r=>`<tr><th scope="row" style="font-weight:600">${esc(r[0])}</th>${r[1].map(v=>`<td><span class="mark ${v?"":"n"}" role="img" aria-label="${lab[v]}">${sym[v]}</span></td>`).join("")}</tr>`).join("");
+  return `<div class="mxwrap"><table class="mx"><thead><tr><th scope="col">Control lever</th>${head}</tr></thead><tbody>${rows}</tbody></table></div>
+  <p class="mxlegend">● full control · ◐ partial or limited · ○ none. Typical patterns only. Actual control depends on provider terms, licenses and technical capability.</p>`;
+}
+function renderDetail(){
+  const l = LAYERS.find(x=>x.id===state.layer), sov = state.view==="sov";
+  let h = `<h2>${l.num} · ${l.name}</h2><p class="lead">${esc(l.does)}</p>${bridge(l)}`;
+  h += sec("Who controls it","est",ul(l.controllers));
+  if(sov){
+    h += sec("What can they change?","est",`<div class="cols3">${Object.entries(l.control).map(([k,v])=>`<div class="card"><h4>${k}</h4>${ul(v)}</div>`).join("")}</div>`);
+    if(l.matrix) h += sec("Who can change what at the model layer","est",matrix(l.matrix));
+    h += sec("Dependencies on other organizations","est",ul(l.deps));
+    h += sec("Can they modify, operate, audit or replace it?","est",`<p>${esc(l.replace)}</p>`);
+    h += sec("What independence could mean here","hyp",`<p>${esc(l.sov)}</p><div class="callout warn">Sovereignty and public benefit are different questions. More control for an actor does not automatically mean better outcomes for the public.</div>`);
+    h += sec("EdTech example","ex",`<div class="callout ex">${esc(l.edtechS)}</div>`);
+    h += sec("A question to discuss","",`<div class="callout q"><small>For the conversation</small>${esc(l.qSov)}</div>`);
+  } else {
+    h += sec("Who influences decisions here?","est",`<div class="cols2"><div class="card"><h4 style="color:var(--rose)">Customers</h4>${ul(l.customers)}</div><div class="card"><h4 style="color:var(--rose)">Who shapes purchasing</h4>${ul(l.purchasing)}</div></div>`);
+    h += sec("What reaches developers today","est",`<div class="cols3"><div class="card"><h4 style="color:var(--rose)">Feedback</h4>${ul(l.feedback)}</div><div class="card"><h4 style="color:var(--rose)">Incentives</h4>${ul(l.incentives)}</div><div class="card"><h4 style="color:var(--rose)">Roadmap inputs</h4>${ul(l.roadmap)}</div></div>`);
+    h += sec("Where public-interest views enter today","est",ul(l.enters));
+    h += sec("Where they may be underrepresented","hyp",ul(l.missing)+`<p class="note">These are questions to test, not findings. Public-interest feedback is not absent. The question is whether it is strong and translated into actionable form.</p>`);
+    h += sec("Who could strengthen the feedback","hyp",ul(l.orgs));
+    h += sec("Possible levers","hyp",`<div class="callout info"><b>Channel of influence:</b> ${esc(l.channel)}. ${esc(l.note)}</div>`+l.levers.map(v=>`<div class="lever"><h4>${esc(v.n)}</h4><dl><dt>Decision</dt><dd>${esc(v.d)}</dd><dt>Decided by</dt><dd>${esc(v.w)}</dd><dt>Mechanism</dt><dd>${esc(v.h)}</dd></dl></div>`).join("")+`<p class="note">Each lever influences a decision made by someone else. None gives public-interest organizations direct control.</p>`);
+    h += sec("EdTech example","ex",`<div class="callout ex">${esc(l.edtech)}</div>`);
+    h += sec("A question to discuss","",`<div class="callout q"><small>For the conversation</small>${esc(l.qPG)}</div>`);
+  }
+  $("#detail").innerHTML = h;
+}
+function update(scroll){
+  document.body.classList.toggle("pgview",state.view==="pg");
+  $("#v-sov").setAttribute("aria-pressed",state.view==="sov");
+  $("#v-pg").setAttribute("aria-pressed",state.view==="pg");
+  $("#hint").textContent = state.view==="sov" ? "Teal: who controls each layer and what they can change." : "Rose: who influences each layer, and where public-interest levers might apply. Dots are a working read of how directly customer demand can reach the layer.";
+  renderCake(); renderDetail(); hash();
+  if(scroll && window.matchMedia("(max-width:980px)").matches) $("#detail").scrollIntoView({behavior:"smooth",block:"start"});
+}
+$("#v-sov").onclick=()=>{state.view="sov";update()};
+$("#v-pg").onclick=()=>{state.view="pg";update()};
+
+/* ===================== EDTECH ===================== */
+function renderEd(){
+  $("#people").innerHTML = STAKE.map(s=>`<button class="pill ${s.pi?"pi":""}" data-s="${s.id}" aria-pressed="${state.stake===s.id}">${esc(s.n)}</button>`).join("");
+  $("#people").querySelectorAll("button").forEach(b=>b.onclick=()=>{state.stake=state.stake===b.dataset.s?null:b.dataset.s;renderEd()});
+  const st = STAKE.find(s=>s.id===state.stake);
+  $("#pdetail").innerHTML = st ? `<b>${esc(st.n)}.</b> ${esc(st.d)}` : "Select a stakeholder above.";
+  const cur = STEPS[state.step];
+  const rows = [{id:"ben",n:"People who use it",ben:true},...LAYERS.map(l=>({id:l.id,n:l.name}))];
+  let h = "";
+  rows.forEach(r=>{
+    const who = STAKE.filter(s=>s.row===r.id).map(s=>s.n);
+    const extra = r.ben ? "Experience the AI tutor directly" : "";
+    const on = cur.rows.includes(r.id);
+    const dots = STEPS.map((s,i)=>s.rows.includes(r.id)?`<span class="sd ${i===state.step?"now":"dim"}" title="Step ${i+1}">${i+1}</span>`:"").join("");
+    h += `<div class="ly ${on?"on":""} ${r.ben?"ben":""}"><div><div class="nm">${r.n}</div><div class="stepdots">${dots}</div></div><div class="who">${who.length?who.join(" · "):""}${extra&&!who.length?extra:""}${r.ben?"":""}</div></div>`;
+  });
+  h += `<div class="pi-band ${cur.rows.includes("pi")?"on":""}"><b>Public-interest and philanthropic organizations</b> sit across the stack. They can translate needs into requirements, fund evidence and pilots, and convene buyers. <span class="note">Influence without control.</span><div class="stepdots" style="display:flex;gap:5px;margin-top:6px">${STEPS.map((s,i)=>s.rows.includes("pi")?`<span class="sd ${i===state.step?"now":"dim"}">${i+1}</span>`:"").join("")}</div></div>`;
+  $("#stk").innerHTML = h;
+  // order: apps at top visually; rows array already People, Applications, Models... fine
+  $("#stepcard").innerHTML = `<div class="n">Step ${state.step+1} of ${STEPS.length}</div><h3>${esc(cur.t)}</h3><p style="margin:0 0 10px;font-size:17px">${esc(cur.b)}</p>${badge(cur.tag)}<p style="margin:10px 0 0;font-size:14px">${esc(cur.c)}</p>
+    <div class="progress" role="group" aria-label="Steps">${STEPS.map((s,i)=>`<button aria-label="Go to step ${i+1}: ${esc(s.t)}" ${i===state.step?'aria-current="true"':""} class="${i<state.step?"done":""}" data-i="${i}"></button>`).join("")}</div>
+    <div class="ctrl"><button class="btn alt" id="prev" ${state.step===0?"disabled":""}>Back</button><button class="btn" id="next" ${state.step===STEPS.length-1?"disabled":""}>Next step</button><button class="btn alt" id="rst">Start over</button></div>
+    <div class="callout warn" style="margin-top:14px">A proposed mechanism to investigate. The signal may weaken with each layer, and some links may not work at all.</div>`;
+  $("#prev").onclick=()=>{state.step=Math.max(0,state.step-1);renderEd()};
+  $("#next").onclick=()=>{state.step=Math.min(STEPS.length-1,state.step+1);renderEd()};
+  $("#rst").onclick=()=>{state.step=0;renderEd()};
+  $("#stepcard").querySelectorAll(".progress button").forEach(b=>b.onclick=()=>{state.step=+b.dataset.i;renderEd()});
+}
+
+/* ===================== DISCOVERY ===================== */
+function renderDisc(){
+  const notes = store.get("sai-notes",{});
+  $("#qgrid").innerHTML = QS.map((x,i)=>`<div class="qcard"><div class="qn">QUESTION ${i+1}</div><h3>${esc(x.q)}</h3>
+    <div class="look">${x.l.length?"Look in the stack:":"Look beyond the stack: people and organizations. See tab 4."} ${x.l.map(id=>`<button data-go="${id}">${NAMES[id]}</button>`).join("")}</div>
+    <label class="note" for="n${i}">Notes</label><textarea id="n${i}" data-i="${i}" placeholder="What we learn, who to ask, what to test next">${esc(notes[i]||"")}</textarea></div>`).join("");
+  $("#qgrid").querySelectorAll("textarea").forEach(t=>t.addEventListener("input",()=>{const n=store.get("sai-notes",{});n[t.dataset.i]=t.value;store.set("sai-notes",n)}));
+  $("#qgrid").querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{state.layer=b.dataset.go;state.view="pg";show("explore");update(true)});
+}
+function allNotes(){
+  const n=store.get("sai-notes",{}); return QS.map((x,i)=>`${i+1}. ${x.q}\n${n[i]||"(no notes yet)"}`).join("\n\n");
+}
+$("#copyNotes").onclick=async()=>{try{await navigator.clipboard.writeText(allNotes());$("#noteStatus").textContent="Copied."}catch(e){$("#noteStatus").textContent="Copy is blocked here. Use Download instead."}};
+$("#dlNotes").onclick=()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([allNotes()],{type:"text/plain"}));a.download="Sovereign-AI-x-Public-Good_notes.txt";a.click();$("#noteStatus").textContent="Downloaded."};
+$("#clearNotes").onclick=()=>{if(confirm("Clear all notes in this browser?")){store.set("sai-notes",{});renderDisc();$("#noteStatus").textContent="Cleared."}};
+
+/* ===================== NEW GUARD ===================== */
+function renderPeople(){
+  const p=store.get("sai-people",[]);
+  $("#plist").innerHTML = p.map((x,i)=>`<li><span>${esc(x)}</span><button aria-label="Remove ${esc(x)}" data-r="${i}">✕</button></li>`).join("");
+  $("#plist").querySelectorAll("button").forEach(b=>b.onclick=()=>{const q=store.get("sai-people",[]);q.splice(+b.dataset.r,1);store.set("sai-people",q);renderPeople()});
+}
+function addPerson(){const v=$("#pname").value.trim();if(!v)return;const q=store.get("sai-people",[]);q.push(v);store.set("sai-people",q);$("#pname").value="";renderPeople()}
+$("#padd").onclick=addPerson; $("#pname").addEventListener("keydown",e=>{if(e.key==="Enter")addPerson()});
+
+/* ===================== TABS ===================== */
+function show(name){
+  ["explore","edtech","disc","ng"].forEach(n=>{
+    $("#p-"+n).hidden = n!==name; $("#t-"+n).setAttribute("aria-selected",n===name);
+  });
+  if(name==="edtech") renderEd();
+  window.scrollTo({top:0});
+}
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>show(t.id.slice(2)));
+document.querySelector('[role="tablist"]').addEventListener("keydown",e=>{
+  const tabs=[...document.querySelectorAll(".tab")], i=tabs.findIndex(t=>t.getAttribute("aria-selected")==="true");
+  if(e.key==="ArrowRight"||e.key==="ArrowLeft"){const j=(i+(e.key==="ArrowRight"?1:-1)+tabs.length)%tabs.length;tabs[j].focus();tabs[j].click()}
+});
+
+/* ===================== INIT ===================== */
+(function(){
+  const m=(location.hash||"").match(/^#(sov|pg)\/(apps|models|infra|chips|energy)$/);
+  if(m){state.view=m[1];state.layer=m[2]}
+  update(false); renderDisc(); renderPeople();
+})();
+</script>
+</body>
+</html>
